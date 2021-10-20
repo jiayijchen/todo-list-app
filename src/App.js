@@ -1,5 +1,6 @@
 import './App.css';
 import { Component } from 'react';
+import List from './List.js';
 // import Header from './Header.js';
 
 class App extends Component {
@@ -7,29 +8,36 @@ class App extends Component {
         super()
         this.state = {
             value: "",
-            todoItems: [],
+            todoItems: [
+                {
+                    ID: Date.now(),
+                    itemName: "todo thing",
+                    checked: false,
+                    deleted: false
+                }
+            ],
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
-        this.setState({ 
-            value: event.target.value 
+        this.setState({
+            value: event.target.value
         });
     }
 
     handleSubmit() {
         this.addItem(this.state.value);
 
-        this.setState( {
+        this.setState({
             value: "",
         });
     }
 
     addItem(todoItem) {
         this.setState({
-            todoItems: this.state.todoItems.concat( {
+            todoItems: this.state.todoItems.concat({
                 ID: Date.now(),
                 itemName: todoItem,
                 checked: false,
@@ -45,13 +53,13 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                <div className="row">
+            <div>
+                <div className="row mt-5 text-center">
                     <h1>To-Do App</h1>
                 </div>
                 <div className="row">
-                    <div className="col-6 offset-3">
-                        <div className="input-group mb-3 border">
+                    <div className="col-8 offset-2 px-0 border">
+                        <div className="input-group">
                             <button
                                 className="btn"
                                 type="button"
@@ -70,6 +78,7 @@ class App extends Component {
                         </div>
                     </div>
                 </div>
+                <List itemList={this.state.todoItems} />
             </div>
         );
     }
