@@ -9,7 +9,7 @@ class App extends Component {
         super();
         this.state = {
             value: "",
-            filterSelect: "",
+            filterSelect: "all",
             todoItemsArr: [
                 {
                     ID: Date.now(),
@@ -19,10 +19,13 @@ class App extends Component {
                 }
             ],
         };
+        
+        this.clearCompleted = this.clearCompleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.markComplete = this.markComplete.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
+        this.enterKey = this.enterKey.bind(this);
     }
 
     handleChange(event) {
@@ -32,7 +35,9 @@ class App extends Component {
     }
 
     handleSubmit() {
-        this.addItem(this.state.value);
+        if (this.state.value !== "") {
+            this.addItem(this.state.value);
+        }
 
         this.setState({
             value: "",
@@ -48,6 +53,12 @@ class App extends Component {
                 deleted: false,
             }]
         });
+    }
+
+    enterKey(event) {
+        if (event.key === "Enter") {
+            this.handleSubmit();
+        }
     }
 
     markComplete(todoID) {
@@ -78,22 +89,45 @@ class App extends Component {
                 deleted: true,
             }
 
-            return {
-                todoItemsArr: newArr
-            }
+            return { todoItemsArr: newArr }
         })
     }
 
-    componentDidMount() {
-        console.log(this.state.todoItemsArr);
+    clearCompleted() {
+        this.setState(prevState => {
+            const newArr = prevState.todoItemsArr.map(item => {
+                if (!item.deleted && item.checked) {
+                    item.deleted = true;
+                }
+                return item;
+            });
+
+            return { todoItemsArr: newArr }
+        })
     }
 
-    componentDidUpdate() {
-        console.log(this.state.value);
-        console.log(this.state.todoItemsArr);
-    }
+    // componentDidMount() {
+    //     console.log(this.state.todoItemsArr);
+    // }
+
+    // componentDidUpdate() {
+    //     console.log(this.state.value);
+    //     console.log(this.state.todoItemsArr);
+    // }
 
     render() {
+        let numOfItems = this.state.todoItemsArr.filter(item => !item.deleted).length;
+
+        let filteredItemsArr = [];
+
+        if (this.state.filterSelect === "all") {
+            filteredItemsArr = this.state.todoItemsArr.filter(item => !item.deleted);
+        } else if (this.state.filterSelect === "active") {
+            filteredItemsArr = this.state.todoItemsArr.filter(item => !item.deleted && !item.checked);
+        } else if (this.state.filterSelect === "completed") {
+            filteredItemsArr = this.state.todoItemsArr.filter(item => !item.deleted && item.checked);
+        }
+
         return (
             <div className="col-8 offset-2">
                 <div className="row mt-5 text-center">
@@ -115,30 +149,59 @@ class App extends Component {
                             placeholder="What needs to be done?"
                             value={this.state.value}
                             onChange={this.handleChange}
+                            onKeyPress={this.enterKey}
                         />
                     </div>
                 </div>
-                {this.state.todoItemsArr.map(todoItemsObj => (
-                    <ListItem key={todoItemsObj.ID} todoItemsObj={todoItemsObj} markComplete={this.markComplete} deleteItem={this.deleteItem} />
-                ))}
-                {this.state.todoItemsArr.length > 0 &&
+                {filteredItemsArr.length > 0 &&
+                    filteredItemsArr.map(todoItemsObj => (
+                        <ListItem key={todoItemsObj.ID} todoItemsObj={todoItemsObj} markComplete={this.markComplete} deleteItem={this.deleteItem} />
+                    ))}
+                {numOfItems > 0 &&
                     <div className="row">
                         <div className="col-3">
-                            <p className="fw-light text-muted">{this.state.todoItemsArr.length} items left</p>
+                            <p className="fw-light text-muted">{numOfItems} items left</p>
                         </div>
                         <div className="col-6 text-center">
-                            <div className="btn-group" role="group">
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked />
-                                <label class="btn btn-outline-secondary" for="btnradio1">Radio 1</label>
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" />
-                                <label class="btn btn-outline-secondary" for="btnradio2">Radio 2</label>
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" />
-                                <label class="btn btn-outline-secondary" for="btnradio3">Radio 3</label>
+                            <div className="btn-group">
+                                <input
+                                    type="radio"
+                                    className="btn-check"
+                                    name="btnradio" id="btn-all"
+                                    autoComplete="off"
+                                    onClick={() => this.setState({ filterSelect: "all" })}
+                                    defaultChecked
+                                />
+                                <label className="btn btn-link" htmlFor="btn-all">All</label>
+                                <input
+                                    type="radio"
+                                    className="btn-check"
+                                    name="btnradio"
+                                    id="btn-active"
+                                    autoComplete="off"
+                                    onClick={() => this.setState({ filterSelect: "active" })}
+                                />
+                                <label className="btn btn-link" htmlFor="btn-active">Active</label>
+                                <input
+                                    type="radio"
+                                    className="btn-check"
+                                    name="btnradio"
+                                    id="btn-complete"
+                                    autoComplete="off"
+                                    onClick={() => this.setState({ filterSelect: "completed" })}
+                                />
+                                <label className="btn btn-link" htmlFor="btn-complete">Completed</label>
                             </div>
                         </div>
-                                    <div className="col-3 pe-0">
-                                        <button type="button" className="btn btn-link float-end pe-0">Clear Completed</button>
-                                    </div>
+                        <div className="col-3 pe-0">
+                            <button 
+                                type="button" 
+                                className="btn btn-link float-end pe-0"
+                                onClick={() => this.clearCompleted()}
+                            >
+                                Clear completed
+                            </button>
+                        </div>
                     </div>
                 }
             </div>
