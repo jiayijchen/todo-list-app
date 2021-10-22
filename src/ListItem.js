@@ -4,19 +4,19 @@ export default function ListItem(props) {
 
     return (
         <div className="row border">
-            <div className="col-2 col-sm-1 px-0">
+            <div className="col-auto px-0">
                 <button 
                     className="btn" 
                     type="button" 
                     onClick={() => props.markComplete(props.todoItemsObj.ID)} 
                 >
-                    <i className="bi-circle" />
+                    <i className={props.todoItemsObj.checked ? "bi-check-circle" : "bi-circle"} />
                 </button>
             </div>
-            <div className="col-8 col-sm-10 text-start align-self-center ps-0">
-                <h5 style={props.todoItemsObj.checked ? { textDecoration: 'line-through' } : { textDecoration: 'none' }}>{props.todoItemsObj.itemName}</h5>
+            <div className="col-8 col-sm text-start align-items-center pt-2 ps-1">
+                <div style={props.todoItemsObj.checked ? { textDecoration: 'line-through' } : { textDecoration: 'none' }}>{props.todoItemsObj.itemName}</div>
             </div>
-            <div className="col-2 col-sm-1 text-end px-0">
+            <div className="col-2 col-sm text-end px-0">
                 <button 
                     className="btn" 
                     type="button"

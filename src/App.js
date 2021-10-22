@@ -19,7 +19,7 @@ class App extends Component {
                 }
             ],
         };
-        
+
         this.clearCompleted = this.clearCompleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,7 +35,7 @@ class App extends Component {
     }
 
     handleSubmit() {
-        if (this.state.value !== "") {
+        if (this.state.value !== "" && !this.state.value.toLowerCase().includes("design")) {
             this.addItem(this.state.value);
         }
 
@@ -45,14 +45,19 @@ class App extends Component {
     }
 
     addItem(todoItem) {
+        const id = Date.now();
+        const todoItemObj = {
+            ID: id,
+            itemName: todoItem,
+            checked: false,
+            deleted: false
+        };
+
         this.setState({
-            todoItemsArr: [...this.state.todoItemsArr, {
-                ID: Date.now(),
-                itemName: todoItem,
-                checked: false,
-                deleted: false,
-            }]
+            todoItemsArr: [...this.state.todoItemsArr, todoItemObj]
         });
+
+        localStorage.setItem(id, todoItemObj);
     }
 
     enterKey(event) {
@@ -67,14 +72,16 @@ class App extends Component {
 
             const newArr = [...prevState.todoItemsArr];
 
-            newArr[foundIndex] = {
+            const newTodoObj = {
                 ...prevState.todoItemsArr[foundIndex],
                 checked: !prevState.todoItemsArr[foundIndex].checked
             }
 
-            return {
-                todoItemsArr: newArr
-            }
+            newArr[foundIndex] = newTodoObj;
+
+            localStorage.setItem(todoID, newTodoObj);
+
+            return { todoItemsArr: newArr }
         })
     }
 
@@ -84,10 +91,16 @@ class App extends Component {
 
             const newArr = [...prevState.todoItemsArr];
 
-            newArr[foundIndex] = {
+            const newTodoObj = {
                 ...prevState.todoItemsArr[foundIndex],
-                deleted: true,
+                deleted: true
             }
+
+            newArr[foundIndex] = newTodoObj;
+
+            // localStorage.setItem(todoID, newTodoObj);
+
+            localStorage.removeItem(todoID);
 
             return { todoItemsArr: newArr }
         })
@@ -104,6 +117,8 @@ class App extends Component {
 
             return { todoItemsArr: newArr }
         })
+
+        // localStorage.clear();
     }
 
     // componentDidMount() {
@@ -194,8 +209,8 @@ class App extends Component {
                             </div>
                         </div>
                         <div className="col-3 pe-0">
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 className="btn btn-link float-end pe-0"
                                 onClick={() => this.clearCompleted()}
                             >
