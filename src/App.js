@@ -11,15 +11,16 @@ class App extends Component {
             value: "",
             filterSelect: "all",
             todoItemsArr: [
-                // {
-                //     ID: Date.now(),
-                //     itemName: "Example Task",
-                //     checked: false,
-                //     deleted: false
-                // }
+                {
+                    ID: Date.now(),
+                    itemName: "Example Task",
+                    checked: false,
+                    deleted: false
+                }
             ],
         };
 
+        this.uncheckCompleted = this.uncheckCompleted.bind(this);
         this.clearCompleted = this.clearCompleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -121,6 +122,21 @@ class App extends Component {
         // localStorage.clear();
     }
 
+    uncheckCompleted() {
+        this.setState(prevState => {
+            const newArr = prevState.todoItemsArr.map(item => {
+                if (!item.deleted && item.checked) {
+                    item.checked = false;
+                }
+                return item;
+            });
+
+            return { todoItemsArr: newArr }
+        })
+
+        // localStorage.clear();
+    }
+
     // componentDidMount() {
     //     console.log(this.state.todoItemsArr);
     // }
@@ -187,7 +203,7 @@ class App extends Component {
                                     onClick={() => this.setState({ filterSelect: "all" })}
                                     defaultChecked
                                 />
-                                <label className="btn btn-outline-dark mx-1 py-0" htmlFor="btn-all">All</label>
+                                <label className="btn btn-outline-dark ms-1 py-0" htmlFor="btn-all">All</label>
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -196,7 +212,7 @@ class App extends Component {
                                     autoComplete="off"
                                     onClick={() => this.setState({ filterSelect: "active" })}
                                 />
-                                <label className="btn btn-outline-dark mx-1 py-0" htmlFor="btn-active">Active</label>
+                                <label className="btn btn-outline-dark ms-1 py-0" htmlFor="btn-active">Active</label>
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -205,7 +221,27 @@ class App extends Component {
                                     autoComplete="off"
                                     onClick={() => this.setState({ filterSelect: "completed" })}
                                 />
-                                <label className="btn btn-outline-dark mx-1 py-0" htmlFor="btn-complete">Completed</label>
+                                <label className="btn btn-outline-dark ms-1 py-0" htmlFor="btn-complete">Completed</label>
+                                {this.state.todoItemsArr.filter(item => !item.deleted && item.checked).length > 0 &&
+                                    <>
+                                        <input
+                                            type="radio"
+                                            className="btn-check"
+                                            name="btnradio"
+                                            id="btn-undocomplete"
+                                            autoComplete="off"
+                                        />
+                                        <label 
+                                            className="btn btn-outline-dark ms-1 px-1 py-0" 
+                                            htmlFor="btn-undocomplete"
+                                            data-bs-toggle="tooltip" 
+                                            data-bs-placement="top" 
+                                            title="Uncheck all"
+                                            onClick={() => this.uncheckCompleted()}
+                                        >
+                                            <i class="bi bi-arrow-counterclockwise" />
+                                        </label>
+                                    </>}
                             </div>
                         </div>
                         <div className="col-3 pe-0">
