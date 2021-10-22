@@ -178,7 +178,7 @@ class App extends Component {
                             <p className="fw-light text-muted my-0">{numOfItems} items left</p>
                         </div>
                         <div className="col-6 text-center py-1">
-                            <div className="btn-toolbar ps-3">
+                            <div className="btn-toolbar-sm">
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -187,7 +187,7 @@ class App extends Component {
                                     onClick={() => this.setState({ filterSelect: "all" })}
                                     defaultChecked
                                 />
-                                <label className="btn btn-outline-secondary mx-1 py-0" htmlFor="btn-all">All</label>
+                                <label className="btn btn-outline-dark mx-1 py-0" htmlFor="btn-all">All</label>
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -196,7 +196,7 @@ class App extends Component {
                                     autoComplete="off"
                                     onClick={() => this.setState({ filterSelect: "active" })}
                                 />
-                                <label className="btn btn-outline-secondary mx-1 py-0" htmlFor="btn-active">Active</label>
+                                <label className="btn btn-outline-dark mx-1 py-0" htmlFor="btn-active">Active</label>
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -205,14 +205,14 @@ class App extends Component {
                                     autoComplete="off"
                                     onClick={() => this.setState({ filterSelect: "completed" })}
                                 />
-                                <label className="btn btn-outline-secondary mx-1 py-0" htmlFor="btn-complete">Completed</label>
+                                <label className="btn btn-outline-dark mx-1 py-0" htmlFor="btn-complete">Completed</label>
                             </div>
                         </div>
                         <div className="col-3 pe-0">
                             {this.state.todoItemsArr.filter(item => !item.deleted && item.checked).length > 0 &&
                                 <button
                                     type="button"
-                                    className="btn btn-link float-end pe-1 pt-1 pb-0 text-muted"
+                                    className="btn btn-link float-end pe-1 pt-1 pb-0 text-muted small-xs"
                                     onClick={() => this.clearCompleted()}
                                 >
                                     clear completed
