@@ -11,12 +11,12 @@ class App extends Component {
             value: "",
             filterSelect: "all",
             todoItemsArr: [
-                {
-                    ID: Date.now(),
-                    itemName: "Example Task",
-                    checked: false,
-                    deleted: false
-                }
+                // {
+                //     ID: Date.now(),
+                //     itemName: "Example Task",
+                //     checked: false,
+                //     deleted: false
+                // }
             ],
         };
 
@@ -145,8 +145,8 @@ class App extends Component {
 
         return (
             <div className="col-8 offset-2">
-                <div className="row mt-5 text-center">
-                    <h1>To-Do App</h1>
+                <div className="row mt-5 mb-2 text-center">
+                    <div className="h1 d-inline-block" id="title">Tod<i className="h4 bi-check2-circle" /><strong>App</strong></div>
                 </div>
                 <div className="row border">
                     <div className="input-group px-0">
@@ -173,12 +173,12 @@ class App extends Component {
                         <ListItem key={todoItemsObj.ID} todoItemsObj={todoItemsObj} markComplete={this.markComplete} deleteItem={this.deleteItem} />
                     ))}
                 {numOfItems > 0 &&
-                    <div className="row">
-                        <div className="col-3">
-                            <p className="fw-light text-muted">{numOfItems} items left</p>
+                    <div className="row border">
+                        <div className="col-3 pt-1">
+                            <p className="fw-light text-muted my-0">{numOfItems} items left</p>
                         </div>
-                        <div className="col-6 text-center">
-                            <div className="btn-group">
+                        <div className="col-6 text-center py-1">
+                            <div className="btn-toolbar ps-3">
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -187,7 +187,7 @@ class App extends Component {
                                     onClick={() => this.setState({ filterSelect: "all" })}
                                     defaultChecked
                                 />
-                                <label className="btn btn-link" htmlFor="btn-all">All</label>
+                                <label className="btn btn-outline-secondary mx-1 py-0" htmlFor="btn-all">All</label>
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -196,7 +196,7 @@ class App extends Component {
                                     autoComplete="off"
                                     onClick={() => this.setState({ filterSelect: "active" })}
                                 />
-                                <label className="btn btn-link" htmlFor="btn-active">Active</label>
+                                <label className="btn btn-outline-secondary mx-1 py-0" htmlFor="btn-active">Active</label>
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -205,17 +205,18 @@ class App extends Component {
                                     autoComplete="off"
                                     onClick={() => this.setState({ filterSelect: "completed" })}
                                 />
-                                <label className="btn btn-link" htmlFor="btn-complete">Completed</label>
+                                <label className="btn btn-outline-secondary mx-1 py-0" htmlFor="btn-complete">Completed</label>
                             </div>
                         </div>
                         <div className="col-3 pe-0">
-                            <button
-                                type="button"
-                                className="btn btn-link float-end pe-0"
-                                onClick={() => this.clearCompleted()}
-                            >
-                                Clear completed
-                            </button>
+                            {this.state.todoItemsArr.filter(item => !item.deleted && item.checked).length > 0 &&
+                                <button
+                                    type="button"
+                                    className="btn btn-link float-end pe-1 pt-1 pb-0 text-muted"
+                                    onClick={() => this.clearCompleted()}
+                                >
+                                    clear completed
+                            </button>}
                         </div>
                     </div>
                 }
