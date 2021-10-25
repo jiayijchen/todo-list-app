@@ -11,12 +11,12 @@ class App extends Component {
             value: "",
             filterSelect: "all",
             todoItemsArr: [
-                {
-                    ID: Date.now(),
-                    itemName: "Example Task",
-                    checked: false,
-                    deleted: false
-                }
+                // {
+                //     ID: Date.now(),
+                //     itemName: "Example Task",
+                //     checked: false,
+                //     deleted: false
+                // }
             ],
         };
 
@@ -58,7 +58,7 @@ class App extends Component {
             todoItemsArr: [...this.state.todoItemsArr, todoItemObj]
         });
 
-        localStorage.setItem(id, todoItemObj);
+        localStorage.setItem(id, JSON.stringify(todoItemObj));
     }
 
     enterKey(event) {
@@ -80,7 +80,7 @@ class App extends Component {
 
             newArr[foundIndex] = newTodoObj;
 
-            localStorage.setItem(todoID, newTodoObj);
+            localStorage.setItem(todoID, JSON.stringify(newTodoObj));
 
             return { todoItemsArr: newArr }
         })
@@ -138,6 +138,13 @@ class App extends Component {
     }
 
     // componentDidMount() {
+    //     let i = 0;
+    //     while (localStorage.key(i)) {
+    //         this.setState({
+    //             todoItemsArr: [...this.state.todoItemsArr, todoItemObj]
+    //         });
+    //     }
+
     //     console.log(this.state.todoItemsArr);
     // }
 
@@ -203,7 +210,7 @@ class App extends Component {
                                     onClick={() => this.setState({ filterSelect: "all" })}
                                     defaultChecked
                                 />
-                                <label className="btn btn-outline-dark ms-1 py-0" htmlFor="btn-all">All</label>
+                                <label className="btn btn-outline-secondary ms-1 py-0" htmlFor="btn-all">All</label>
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -212,7 +219,7 @@ class App extends Component {
                                     autoComplete="off"
                                     onClick={() => this.setState({ filterSelect: "active" })}
                                 />
-                                <label className="btn btn-outline-dark ms-1 py-0" htmlFor="btn-active">Active</label>
+                                <label className="btn btn-outline-secondary ms-1 py-0" htmlFor="btn-active">Active</label>
                                 <input
                                     type="radio"
                                     className="btn-check"
@@ -221,7 +228,7 @@ class App extends Component {
                                     autoComplete="off"
                                     onClick={() => this.setState({ filterSelect: "completed" })}
                                 />
-                                <label className="btn btn-outline-dark ms-1 py-0" htmlFor="btn-complete">Completed</label>
+                                <label className="btn btn-outline-secondary ms-1 py-0" htmlFor="btn-complete">Completed</label>
                                 {this.state.todoItemsArr.filter(item => !item.deleted && item.checked).length > 0 &&
                                     <>
                                         <input
@@ -232,7 +239,7 @@ class App extends Component {
                                             autoComplete="off"
                                         />
                                         <label 
-                                            className="btn btn-outline-dark ms-1 px-1 py-0" 
+                                            className="btn btn-outline-secondary ms-1 px-1 py-0" 
                                             htmlFor="btn-undocomplete"
                                             data-bs-toggle="tooltip" 
                                             data-bs-placement="top" 
