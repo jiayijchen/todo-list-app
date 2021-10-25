@@ -26,7 +26,3 @@ App
         - Menu Filter
             - has buttons that filter list of items
             - button click changes filter value
-### List Items
-Contains list of items
-
-### 
